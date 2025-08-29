@@ -1,0 +1,79 @@
+<div id="spb-root" data-root-id="{{ block.id }}"
+  data-headline-text="{{ block.settings.headline_text }}"
+  data-subline-text="{{ block.settings.subline_text }}"
+  data-show-posts="{{ block.settings.show_posts }}"
+  data-show-followers="{{ block.settings.show_followers }}"
+  data-show-likes="{{ block.settings.show_likes }}"
+  data-show-views="{{ block.settings.show_views }}"
+  data-speed-followers="{{ block.settings.speed_followers }}"
+  data-speed-likes="{{ block.settings.speed_likes }}"
+  data-speed-views="{{ block.settings.speed_views }}"
+  data-headline-size="{{ block.settings.headline_size }}"
+  data-subtitle-size="{{ block.settings.subtitle_size }}"
+  data-metric-font-size="{{ block.settings.metric_font_size }}"
+  data-label-font-size="{{ block.settings.label_font_size }}"
+  data-metric-icon-size="{{ block.settings.metric_icon_size }}"
+  data-social-icon-size="{{ block.settings.social_icon_size }}"
+  data-border-radius="{{ block.settings.border_radius }}"
+  data-icon-color="{{ block.settings.icon_color }}"
+  data-headline-color="{{ block.settings.headline_color }}"
+  data-text-color="{{ block.settings.text_color }}"
+  data-background-color="{{ block.settings.background_color }}"
+  data-use-gradient="{{ block.settings.use_gradient }}"
+  data-enable-ticker="{{ block.settings.enable_ticker }}"
+  data-ticker-height="{{ block.settings.ticker_height }}"
+  data-ticker-font-size="{{ block.settings.ticker_font_size }}"
+  data-show-gt-prefix="{{ block.settings.show_gt_prefix }}"
+  data-shop-domain="{{ shop.permanent_domain }}"
+></div>
+
+<link rel="stylesheet" href="{{ 'social-proof-block.css' | asset_url }}">
+<script>
+  {% assign platforms_json = app.metafields.social_proof.platforms_json.value | default: '[]' | parse_json %}
+  window.SPB_DATA = {
+    followers: {{ app.metafields.social_proof.follower_count.value | default: 0 }},
+    likes:     {{ app.metafields.social_proof.like_count.value | default: 0 }},
+    views:     {{ app.metafields.social_proof.view_count.value | default: 0 }},
+    posts: {{ app.metafields.social_proof.post_count.value | default: 0 }},
+    platforms: {{ platforms_json | json }}
+  };
+</script>
+<script src="{{ 'social-proof-block.js' | asset_url }}" defer
+        data-shop-domain="{{ shop.permanent_domain }}" data-root-id="{{ block.id }}"></script>
+
+{% schema %}
+{
+  "name": "Social Proof Block",
+  "target": "section",
+  "settings": [
+    {"type": "text", "id": "headline_text", "label": "Headline", "default": "Our social reach"},
+    {"type": "range", "id": "headline_size", "label": "Headline font size (px)", "min": 10, "max": 30, "default": 20},
+    {"type": "text", "id": "subline_text", "label": "Subtitle", "default": "Join thousands of followers"},
+    {"type": "range", "id": "subtitle_size", "label": "Subtitle font size (px)", "min": 6, "max": 18, "default": 12},
+
+    {"type": "checkbox", "id": "show_posts", "label": "Show Posts", "default": true},
+    {"type": "checkbox", "id": "show_followers", "label": "Show Followers", "default": true},
+    {"type": "checkbox", "id": "show_likes", "label": "Show Likes", "default": true},
+    {"type": "checkbox", "id": "show_views", "label": "Show Views", "default": true},
+
+    {"type": "range", "id": "speed_followers", "label": "Followers speed (per min)", "min": 0, "max": 100, "default": 5},
+    {"type": "range", "id": "speed_likes", "label": "Likes speed (per min)", "min": 0, "max": 100, "default": 10},
+    {"type": "range", "id": "speed_views", "label": "Views speed (per min)", "min": 0, "max": 100, "default": 20},
+    {"type": "range", "id": "metric_font_size", "label": "Number font size (px)", "min": 10, "max": 30, "default": 18},
+    {"type": "range", "id": "label_font_size", "label": "Label font size (px)", "min": 8, "max": 24, "default": 15},
+    {"type": "range", "id": "metric_icon_size", "label": "Number icon size (px)", "min": 12, "max": 36, "default": 24},
+    {"type": "range", "id": "social_icon_size", "label": "Social icon size (px)", "min": 12, "max": 28, "default": 20},
+    {"type": "range", "id": "border_radius", "label": "Border radius (px)", "min": 0, "max": 100, "default": 48},
+    {"type": "color", "id": "icon_color", "label": "Icon color", "default": "#ffffff"},
+    {"type": "color", "id": "headline_color", "label": "Headline text color", "default": "#ffffff"},
+    {"type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff"},
+    {"type": "color", "id": "background_color", "label": "Background color", "default": "#45C081"},
+    {"type": "checkbox", "id": "use_gradient", "label": "Use gradient", "default": true},
+    {"type": "checkbox", "id": "enable_ticker", "label": "Show ticker", "default": true},
+    {"type": "range", "id": "ticker_font_size", "label": "Ticker font size (px)", "min": 4, "max": 20, "default": 10},
+    {"type": "checkbox", "id": "show_gt_prefix", "label": "Prefix numbers with >", "default": false}
+  ],
+  "javascript": "social-proof-block.js",
+  "stylesheet": "social-proof-block.css"
+}
+{% endschema %}

@@ -1,0 +1,41 @@
+<div id="spb-root" data-root-id="footer"
+  data-headline-text="Our social reach"
+  data-subline-text="Join thousands of followers"
+  data-show-posts="true"
+  data-show-followers="true"
+  data-show-likes="true"
+  data-show-views="true"
+  data-speed-followers="5"
+  data-speed-likes="10"
+  data-speed-views="20"
+  data-headline-size="20"
+  data-subtitle-size="12"
+  data-metric-font-size="18"
+  data-label-font-size="16"
+  data-metric-icon-size="24"
+  data-social-icon-size="20"
+  data-border-radius="48"
+  data-icon-color="#ffffff"
+  data-headline-color="#ffffff"
+  data-text-color="#ffffff"
+  data-background-color="#451081"
+  data-use-gradient="true"
+  data-enable-ticker="true"
+  data-ticker-height="40"
+  data-ticker-font-size="14"
+  data-show-gt-prefix="false"
+  data-shop-domain="{{ shop.permanent_domain }}"
+></div>
+
+<link rel="stylesheet" href="{{ 'social-proof-block.css' | asset_url }}">
+<script>
+  {% assign platforms_json = app.metafields.social_proof.platforms_json.value | default: '[]' | parse_json %}
+  window.SPB_DATA = {
+    followers: {{ app.metafields.social_proof.follower_count.value | default: 0 }},
+    likes:     {{ app.metafields.social_proof.like_count.value | default: 0 }},
+    views:     {{ app.metafields.social_proof.view_count.value | default: 0 }},
+    posts: {{ app.metafields.social_proof.post_count.value | default: 0 }},
+    platforms: {{ platforms_json | json }}
+  };
+</script>
+<script src="{{ 'social-proof-block.js' | asset_url }}" defer data-shop-domain="{{ shop.permanent_domain }}" data-root-id="footer"></script>

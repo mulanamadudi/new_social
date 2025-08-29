@@ -1,0 +1,509 @@
+{% assign msc_id = block.id | replace: '_', '' | downcase %}
+{% assign platforms = app.metafields.social_proof.platforms_json.value | default: '[]' | parse_json %}
+
+{% style %}
+  .msc-social-counter-{{ msc_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 32px;
+    background-color: {{ block.settings.container_background_color | default: 'transparent' }};
+    border-radius: 8px;
+  }
+
+  .msc-social-counter__item-{{ msc_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px;
+    background-color: {{ block.settings.background_color | default: '#ffffff' }};
+    border-radius: {{ block.settings.block_border_radius | default: 8 }}px;
+    flex: 1 1 calc(16.66% - 20px);
+    min-width: 140px;
+    transition: transform 0.2s ease;
+    text-decoration: none;
+    {% if block.settings.enable_shadow %}
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    {% else %}
+    box-shadow: none;
+    {% endif %}
+  }
+
+  .msc-social-counter__item-{{ msc_id }}:hover {
+    transform: translateY(-2px);
+    {% if block.settings.enable_shadow %}
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    {% endif %}
+  }
+
+  .msc-social-counter__icon-{{ msc_id }} {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 8px;
+    fill: {{ block.settings.icon_color | default: '#000000' }};
+    flex-shrink: 0;
+  }
+
+  .msc-social-counter__stats-{{ msc_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .msc-social-counter__stat-{{ msc_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+    min-height: 22px;
+  }
+
+  .msc-social-counter__count-{{ msc_id }} {
+    font-size: 16px;
+    font-weight: 700;
+    color: {{ block.settings.count_color | default: '#000000' }};
+    margin: 0;
+    line-height: 1.2;
+    min-width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .msc-social-counter__label-{{ msc_id }} {
+    font-size: 10px;
+    color: {{ block.settings.label_color | default: '#6c757d' }};
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    margin: 0;
+    text-align: left;
+    flex-grow: 1;
+    padding-right: 8px;
+  }
+
+  .msc-social-counter__single-stat-{{ msc_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    min-height: 42px;
+  }
+
+  .msc-social-counter__single-stat-{{ msc_id }} .msc-social-counter__count-{{ msc_id }} {
+    width: 100%;
+    text-align: center;
+    min-width: 100%;
+  }
+
+  .msc-social-counter__single-stat-{{ msc_id }} .msc-social-counter__label-{{ msc_id }} {
+    text-align: center;
+    padding-right: 0;
+    flex-grow: 0;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    .msc-social-counter-{{ msc_id }} {
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .msc-social-counter__item-{{ msc_id }} {
+      flex: 1 1 calc({% if block.settings.mobile_columns == '2' %}50%{% else %}33.33%{% endif %} - 16px);
+      {% if block.settings.mobile_columns == '2' %}
+      min-width: 140px;
+      {% else %}
+      min-width: 100px;
+      {% endif %}
+      padding: 12px;
+    }
+
+    .msc-social-counter__icon-{{ msc_id }} {
+      width: 26px;
+      height: 26px;
+    }
+
+    .msc-social-counter__count-{{ msc_id }} {
+      font-size: 14px;
+      min-width: 45px;
+    }
+
+    .msc-social-counter__label-{{ msc_id }} {
+      font-size: 9px;
+    }
+    {% if block.settings.mobile_columns == '3' %}
+    .msc-social-counter__stat-{{ msc_id }} {
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 4px;
+      min-height: 42px;
+    }
+    .msc-social-counter__stat-{{ msc_id }} .msc-social-counter__count-{{ msc_id }} {
+      width: 100%;
+      text-align: center;
+      min-width: 100%;
+    }
+    .msc-social-counter__stat-{{ msc_id }} .msc-social-counter__label-{{ msc_id }} {
+      text-align: center;
+      padding-right: 0;
+      flex-grow: 0;
+      width: 100%;
+    }
+    {% endif %}
+  }
+
+  @media screen and (max-width: 480px) {
+    .msc-social-counter-{{ msc_id }} {
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .msc-social-counter__item-{{ msc_id }} {
+      flex: 1 1 calc({% if block.settings.mobile_columns == '2' %}50%{% else %}33.33%{% endif %} - 12px);
+      {% if block.settings.mobile_columns == '2' %}
+      min-width: 130px;
+      {% else %}
+      min-width: 90px;
+      {% endif %}
+      padding: 11px;
+    }
+
+    .msc-social-counter__icon-{{ msc_id }} {
+      width: 22px;
+      height: 22px;
+    }
+
+    .msc-social-counter__count-{{ msc_id }} {
+      font-size: 13px;
+      min-width: 40px;
+    }
+
+    .msc-social-counter__label-{{ msc_id }} {
+      font-size: 8px;
+    }
+    {% if block.settings.mobile_columns == '3' %}
+    .msc-social-counter__stat-{{ msc_id }} {
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 4px;
+      min-height: 42px;
+    }
+    .msc-social-counter__stat-{{ msc_id }} .msc-social-counter__count-{{ msc_id }} {
+      width: 100%;
+      text-align: center;
+      min-width: 100%;
+    }
+    .msc-social-counter__stat-{{ msc_id }} .msc-social-counter__label-{{ msc_id }} {
+      text-align: center;
+      padding-right: 0;
+      flex-grow: 0;
+      width: 100%;
+    }
+    {% endif %}
+  }
+{% endstyle %}
+
+<social-counter-{{ msc_id }} class="msc-social-counter-{{ msc_id }}" {{ block.shopify_attributes }}>
+  {% for p in platforms %}
+    <a href="{{ p.profileUrl }}" class="msc-social-counter__item-{{ msc_id }}" target="_blank" rel="noopener noreferrer">
+      <svg class="msc-social-counter__icon-{{ msc_id }}" viewBox="0 0 24 24">
+        {% case p.id %}
+          {% when 'instagram' %}
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          {% when 'youtube' %}
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          {% when 'tiktok' %}
+           <path transform="scale(0.2)" d="m102.986 50.4581c-.831.0796-1.665.1211-2.5.1249-9.1551.001-17.6938-4.5378-22.7089-12.0716v41.1066c0 16.7794-13.8293 30.382-30.8885 30.382s-30.8886-13.6026-30.8886-30.382 13.8294-30.382 30.8886-30.382c.6449 0 1.2751.0569 1.9091.0964v14.9717c-.634-.0747-1.2571-.1889-1.9091-.1889-8.7067 0-15.7649 6.9425-15.7649 15.5064s7.0582 15.5061 15.7649 15.5061c8.7082 0 16.3988-6.7482 16.3988-15.3136l.1519-69.8141h14.5623c1.3732 12.8445 11.9028 22.8773 24.9984 23.8188v16.6393"/>
+          {% when 'facebook' %}
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          {% when 'pinterest' %}
+            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24c6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001 12.017.001z"/>
+          {% when 'x' %}
+            <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+        {% endcase %}
+      </svg>
+      <div class="msc-social-counter__stats-{{ msc_id }}">
+        {% assign stats_count = 0 %}
+        {% if block.settings.show_followers and p.followers > 0 %}{% assign stats_count = stats_count | plus: 1 %}{% endif %}
+        {% if block.settings.show_posts and p.posts > 0 %}{% assign stats_count = stats_count | plus: 1 %}{% endif %}
+        {% if block.settings.show_likes and p.likes > 0 %}{% assign stats_count = stats_count | plus: 1 %}{% endif %}
+        {% if block.settings.show_views and p.views > 0 %}{% assign stats_count = stats_count | plus: 1 %}{% endif %}
+        {% if stats_count == 1 %}
+          {% if block.settings.show_followers and p.followers > 0 %}
+            <div class="msc-social-counter__single-stat-{{ msc_id }}">
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.followers }}" data-original="{{ p.followers }}">{{ p.followers }}</div>
+              <div class="msc-social-counter__label-{{ msc_id }}">{% if p.id == 'youtube' %}Subscribers{% else %}Followers{% endif %}</div>
+            </div>
+          {% endif %}
+          {% if block.settings.show_posts and p.posts > 0 %}
+            <div class="msc-social-counter__single-stat-{{ msc_id }}">
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.posts }}" data-original="{{ p.posts }}">{{ p.posts }}</div>
+              <div class="msc-social-counter__label-{{ msc_id }}">{% if p.id == 'youtube' %}Videos{% elsif p.id == 'pinterest' %}Pins{% else %}Posts{% endif %}</div>
+            </div>
+          {% endif %}
+          {% if block.settings.show_likes and p.likes > 0 %}
+            <div class="msc-social-counter__single-stat-{{ msc_id }}">
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.likes }}" data-original="{{ p.likes }}">{{ p.likes }}</div>
+              <div class="msc-social-counter__label-{{ msc_id }}">Likes</div>
+            </div>
+          {% endif %}
+          {% if block.settings.show_views and p.views > 0 %}
+            <div class="msc-social-counter__single-stat-{{ msc_id }}">
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.views }}" data-original="{{ p.views }}">{{ p.views }}</div>
+              <div class="msc-social-counter__label-{{ msc_id }}">Views</div>
+            </div>
+          {% endif %}
+        {% else %}
+          {% if block.settings.show_followers and p.followers > 0 %}
+            <div class="msc-social-counter__stat-{{ msc_id }}">
+              <div class="msc-social-counter__label-{{ msc_id }}">{% if p.id == 'youtube' %}Subscribers{% else %}Followers{% endif %}</div>
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.followers }}" data-original="{{ p.followers }}">{{ p.followers }}</div>
+            </div>
+          {% endif %}
+          {% if block.settings.show_posts and p.posts > 0 %}
+            <div class="msc-social-counter__stat-{{ msc_id }}">
+              <div class="msc-social-counter__label-{{ msc_id }}">{% if p.id == 'youtube' %}Videos{% elsif p.id == 'pinterest' %}Pins{% else %}Posts{% endif %}</div>
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.posts }}" data-original="{{ p.posts }}">{{ p.posts }}</div>
+            </div>
+          {% endif %}
+          {% if block.settings.show_likes and p.likes > 0 %}
+            <div class="msc-social-counter__stat-{{ msc_id }}">
+              <div class="msc-social-counter__label-{{ msc_id }}">Likes</div>
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.likes }}" data-original="{{ p.likes }}">{{ p.likes }}</div>
+            </div>
+          {% endif %}
+          {% if block.settings.show_views and p.views > 0 %}
+            <div class="msc-social-counter__stat-{{ msc_id }}">
+              <div class="msc-social-counter__label-{{ msc_id }}">Views</div>
+              <div class="msc-social-counter__count-{{ msc_id }}" data-target="{{ p.views }}" data-original="{{ p.views }}">{{ p.views }}</div>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </a>
+  {% endfor %}
+</social-counter-{{ msc_id }}>
+<script>
+(function() {
+  class MinimalSocialCounter{{ msc_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.animationDuration = 2000;
+      this.hasAnimated = false;
+      this.thousandSuffix = {{ block.settings.thousand_suffix | default: 'K' | json }};
+      this.millionSuffix = {{ block.settings.million_suffix | default: 'M' | json }};
+      this.billionSuffix = {{ block.settings.billion_suffix | default: 'B' | json }};
+    }
+
+    connectedCallback() {
+      this.setupCounters();
+      this.observeElement();
+    }
+
+    setupCounters() {
+      this.counters = this.querySelectorAll('.msc-social-counter__count-{{ msc_id }}[data-target]');
+    }
+
+    observeElement() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !this.hasAnimated) {
+            this.hasAnimated = true;
+            this.startCounters();
+          }
+        });
+      }, { threshold: 0.5 });
+
+      observer.observe(this);
+    }
+
+    startCounters() {
+      this.counters.forEach(counter => {
+        const originalText = counter.dataset.original;
+        const target = this.parseNumber(originalText);
+        this.animateCounter(counter, target, originalText);
+      });
+    }
+
+    parseNumber(text) {
+      const cleanText = text.toString().toLowerCase().replace(/,/g, '');
+      let multiplier = 1;
+      let baseNumber = parseFloat(cleanText);
+
+      if (cleanText.includes('k')) {
+        multiplier = 1000;
+        baseNumber = parseFloat(cleanText.replace('k', ''));
+      } else if (cleanText.includes('m')) {
+        multiplier = 1000000;
+        baseNumber = parseFloat(cleanText.replace('m', ''));
+      } else if (cleanText.includes('b') || cleanText.includes('mrd')) {
+        multiplier = 1000000000;
+        baseNumber = parseFloat(cleanText.replace(/b|mrd/g, ''));
+      }
+
+      return Math.floor(baseNumber * multiplier);
+    }
+
+    animateCounter(element, target, originalText) {
+      const startTime = performance.now();
+      const startValue = 0;
+
+      const animate = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / this.animationDuration, 1);
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = Math.floor(startValue + (target - startValue) * easeOutQuart);
+        element.textContent = this.formatNumber(currentValue);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          element.textContent = this.formatNumberWithSuffix(target);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }
+
+    formatNumber(num) {
+      if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(1).replace('.0', '') + ' ' + this.billionSuffix;
+      } else if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace('.0', '') + ' ' + this.millionSuffix;
+      } else if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace('.0', '') + ' ' + this.thousandSuffix;
+      }
+      return num.toLocaleString();
+    }
+
+    formatNumberWithSuffix(num) {
+      if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(1).replace('.0', '') + ' ' + this.billionSuffix;
+      } else if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace('.0', '') + ' ' + this.millionSuffix;
+      } else if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace('.0', '') + ' ' + this.thousandSuffix;
+      }
+      return num.toLocaleString();
+    }
+  }
+
+  customElements.define('social-counter-{{ msc_id }}', MinimalSocialCounter{{ msc_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Minimal Social Proof",
+  "target": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_followers",
+      "label": "Show followers",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_posts",
+      "label": "Show posts",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_likes",
+      "label": "Show likes",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_views",
+      "label": "Show views",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "container_background_color",
+      "label": "Container background color",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Block background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "count_color",
+      "label": "Count text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label color",
+      "default": "#6c757d"
+    },
+    {
+      "type": "range",
+      "id": "block_border_radius",
+      "label": "Block border radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shadow",
+      "label": "Enable shadow",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "thousand_suffix",
+      "label": "Thousand suffix",
+      "default": "K"
+    },
+    {
+      "type": "text",
+      "id": "million_suffix",
+      "label": "Million suffix",
+      "default": "M"
+    },
+    {
+      "type": "text",
+      "id": "billion_suffix",
+      "label": "Billion suffix",
+      "default": "B"
+    }
+  ]
+}
+{% endschema %}

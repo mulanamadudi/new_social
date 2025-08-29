@@ -1,0 +1,21 @@
+client_id = "72622249f28fad1dfb39724ff878e184"
+name = "social-media-counter"
+application_url = "https://excel-vb-flooring-shipments.trycloudflare.com"
+embedded = true
+handle = "social-media-counter"
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2025-01"
+
+[access_scopes]
+scopes = "write_metafields,read_products"
+
+[auth]
+redirect_urls = ["https://excel-vb-flooring-shipments.trycloudflare.com/auth/callback", "https://excel-vb-flooring-shipments.trycloudflare.com/auth/shopify/callback", "https://excel-vb-flooring-shipments.trycloudflare.com/api/auth/callback"]
+
+[pos]
+embedded = false

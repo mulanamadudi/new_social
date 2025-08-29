@@ -1,0 +1,45 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "bccc187bba544194e7fd45625691311b"
+name = "Social Media Live Counter"
+handle = "social-media-counter"
+application_url = "https://social-media-counter.onrender.com"
+embedded = true
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+  [[webhooks.subscriptions]]
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+  uri = "/webhooks/compliance"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopesy
+scopes = ""
+
+[auth]
+redirect_urls = [
+  "https://social-media-counter.onrender.com/auth/callback",
+  "https://social-media-counter.onrender.com/auth/shopify/callback",
+  "https://social-media-counter.onrender.com/api/auth/callback"
+]
+
+[pos]
+embedded = false
+
+[app_proxy]
+url = "https://locked-ment-drum-sm.trycloudflare.com"
+subpath = "social-media-counter"
+prefix = "apps"
